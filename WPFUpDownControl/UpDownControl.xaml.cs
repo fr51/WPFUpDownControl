@@ -20,6 +20,10 @@ namespace WPFUpDownControl
 		/// Exposes the <see cref="Step"/> property
 		/// </summary>
 		public static readonly DependencyProperty stepProperty=DependencyProperty.Register ("Step", typeof (decimal?), typeof (UpDownControl), new PropertyMetadata (null, OnStepPropertyChanged));
+		/// <summary>
+		/// Exposes the <see cref="MinValue"/> property
+		/// </summary>
+		public static readonly DependencyProperty minValueProperty=DependencyProperty.Register ("MinValue", typeof (decimal?), typeof (UpDownControl), new PropertyMetadata (null, OnMinValuePropertyChanged));
 
 		/// <summary>
 		/// Exposes the <see cref="CurrentValueChanged"/> event
@@ -29,6 +33,10 @@ namespace WPFUpDownControl
 		/// Exposes the <see cref="StepChanged"/> event
 		/// </summary>
 		public static readonly RoutedEvent StepChangedEvent=EventManager.RegisterRoutedEvent ("StepChanged", RoutingStrategy.Bubble, typeof (RoutedEventHandler), typeof (UpDownControl));
+		/// <summary>
+		/// Exposes the <see cref="MinValueChanged"/> event
+		/// </summary>
+		public static readonly RoutedEvent MinValueChangedEvent=EventManager.RegisterRoutedEvent ("MinValueChanged", RoutingStrategy.Bubble, typeof (RoutedEventHandler), typeof (UpDownControl));
 
 		/// <summary>
 		/// This event triggers when the <see cref="CurrentValue"/> changes
@@ -58,6 +66,21 @@ namespace WPFUpDownControl
 			remove
 			{
 				RemoveHandler (StepChangedEvent, value);
+			}
+		}
+		/// <summary>
+		/// This event triggers when the <see cref="MinValue"/> changes
+		/// </summary>
+		[Description ("Triggered when the minimum value changes")]
+		public event RoutedEventHandler MinValueChanged
+		{
+			add
+			{
+				AddHandler (MinValueChangedEvent, value);
+			}
+			remove
+			{
+				RemoveHandler (MinValueChangedEvent, value);
 			}
 		}
 
@@ -91,6 +114,22 @@ namespace WPFUpDownControl
 			{
 				this.CheckStep (value);
 				SetValue (stepProperty, value);
+			}
+		}
+		/// <summary>
+		/// This is the value the <see cref="CurrentValue"/> can't go under
+		/// </summary>
+		[Bindable (true)]
+		public decimal? MinValue
+		{
+			get
+			{
+				return ((decimal?) GetValue (minValueProperty));
+			}
+			set
+			{
+				this.CheckMinValue (value);
+				SetValue (minValueProperty, value);
 			}
 		}
 
@@ -157,6 +196,32 @@ namespace WPFUpDownControl
 		}
 
 		/// <summary>
+		/// callback triggered when the <see cref="minValueProperty"/> changes
+		/// </summary>
+		/// <param name="dependencyObject">
+		/// the <see cref="DependencyObject"/> where the property changed
+		/// </param>
+		/// <param name="dependencyPropertyChangedEventArgs">
+		/// some change-related data
+		/// </param>
+		private static void OnMinValuePropertyChanged (DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+		{
+			UpDownControl upDownControl=(UpDownControl) dependencyObject;
+
+			upDownControl.OnMinValueChanged ();
+		}
+
+		/// <summary>
+		/// Raises the <see cref="MinValueChangedEvent"/> event
+		/// </summary>
+		protected void OnMinValueChanged ()
+		{
+			RoutedEventArgs routedEventArgs=new RoutedEventArgs (MinValueChangedEvent);
+
+			RaiseEvent (routedEventArgs);
+		}
+
+		/// <summary>
 		/// Checks <see cref="CurrentValue"/> fulfills some constraints
 		/// </summary>
 		/// <param name="value">
@@ -170,6 +235,11 @@ namespace WPFUpDownControl
 			if (value==null)
 			{
 				throw new Exception ("Current value must be defined");
+			}
+
+			if (this.MinValue!=null && value<this.MinValue)
+			{
+				throw new Exception ("Current value can't be less than min one");
 			}
 		}
 
@@ -196,6 +266,26 @@ namespace WPFUpDownControl
 		}
 
 		/// <summary>
+		/// Checks <see cref="MinValue"/> fulfills some constraints
+		/// </summary>
+		/// <param name="value">
+		/// the <see cref="MinValue"/>
+		/// </param>
+		/// <exception cref="Exception">
+		/// thrown when one of the constraints isn't fulfilled
+		/// </exception>
+		private void CheckMinValue (decimal? value)
+		{
+			if (value!=null)
+			{
+				if (value>this.CurrentValue)
+				{
+					throw new Exception ("Min value must be less than current one");
+				}
+			}
+		}
+
+		/// <summary>
 		/// Performs some checks and adjustments when the control is ready to use
 		/// </summary>
 		/// <param name="sender">
@@ -208,6 +298,7 @@ namespace WPFUpDownControl
 		{
 			this.CheckCurrentValue (this.CurrentValue);
 			this.CheckStep (this.Step);
+			this.CheckMinValue (this.MinValue);
 		}
 
 		/// <summary>
@@ -251,7 +342,17 @@ namespace WPFUpDownControl
 		/// </summary>
 		private void DecreaseCurrentValue ()
 		{
-			this.CurrentValue-=this.Step;
+			if (this.MinValue!=null)
+			{
+				if (this.CurrentValue-this.Step>=this.MinValue)
+				{
+					this.CurrentValue-=this.Step;
+				}
+			}
+			else
+			{
+				this.CurrentValue-=this.Step;
+			}
 		}
 	}
 }
