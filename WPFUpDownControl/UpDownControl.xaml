@@ -27,6 +27,7 @@
 					<Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#FF000000" Data="M0,0 L8,0 L4,4 z"/>
 				</Button.Content>
 			</Button>
+			<Border BorderBrush="#FF808080" BorderThickness="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Padding="0" Margin="0"/>
 		</Grid>
 	</Border>
 </UserControl>
