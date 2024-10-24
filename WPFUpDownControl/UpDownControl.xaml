@@ -17,6 +17,16 @@
 				<ColumnDefinition Width="22"/>
 			</Grid.ColumnDefinitions>
 			<TextBox x:Name="ValueField" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Grid.Column="0" Grid.RowSpan="2" Text="{Binding CurrentValue, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+			<Button x:Name="IncreaseButton" Grid.Column="1" Grid.Row="0" Width="auto" Height="auto" Click="IncreaseButton_Click">
+				<Button.Content>
+					<Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#FF000000" Data="M4,0 L0,4 L8,4 z"/>
+				</Button.Content>
+			</Button>
+			<Button x:Name="DecreaseButton" Grid.Column="1" Grid.Row="1" Width="auto" Height="auto" Click="DecreaseButton_Click">
+				<Button.Content>
+					<Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#FF000000" Data="M0,0 L8,0 L4,4 z"/>
+				</Button.Content>
+			</Button>
 		</Grid>
 	</Border>
 </UserControl>
