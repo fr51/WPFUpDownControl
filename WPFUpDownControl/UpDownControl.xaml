@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="WPFUpDownControl.UpDownControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:WPFUpDownControl" mc:Ignorable="d">
+	<Border>
+		<Border.OpacityMask>
+			<VisualBrush>
+				<VisualBrush.Visual>
+					<Border Background="#FF000000" SnapsToDevicePixels="True" Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}" Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}"/>
+				</VisualBrush.Visual>
+			</VisualBrush>
+		</Border.OpacityMask>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition Width="22"/>
+			</Grid.ColumnDefinitions>
+		</Grid>
+	</Border>
+</UserControl>
