@@ -1,0 +1,14 @@
+.vs/
+WPFUpDownControl/obj/Debug/*.cache
+WPFUpDownControl/obj/Debug/*.lref
+WPFUpDownControl/obj/Release/*.cache
+WPFUpDownControl/obj/Release/*.lref
+WPFUpDownControl/obj/Debug/WPFUpDownControl.csproj.FileListAbsolute.txt
+WPFUpDownControl/obj/Debug/*.g.cs
+WPFUpDownControl/obj/Debug/*.g.i.cs
+WPFUpDownControl/obj/Release/*.g.cs
+WPFUpDownControl/bin/Debug/*.dll
+WPFUpDownControl/bin/Debug/*.pdb
+WPFUpDownControl/obj/Debug/*.dll
+WPFUpDownControl/obj/Debug/*.pdb
+WPFUpDownControl/obj/Debug/WPFUpDownControl.g.resources
