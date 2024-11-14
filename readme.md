@@ -9,7 +9,9 @@ This component intends to only hold a numeric value, whereas the TextBox aims to
 1. [Installation](#installation)
 2. [How to use](#how-to-use)
 3. [Exposed properties](#exposed-properties)
+	1. [Current value](#currentvalue)
 4. [Exposed events](#exposed-events)
+	1. [Current value changed](#currentvaluechanged)
 5. [Documentation](#documentation)
 6. [Dependencies](#dependencies)
 7. [Tests](#tests)
@@ -40,12 +42,20 @@ These are the properties you'll use in your markup
 
 Here's a snippet example showing how to set these properties in your markup:
 ```xaml
-<vc:UpDownControl/>
+<vc:UpDownControl CurrentValue="5.1"/>
 ```
 
 Here's the same one seen from your code-behind (assuming you named the variable as "WUDC"):
 ```c#
+WUDC.CurrentValue=5.1m;
 ```
+
+### `CurrentValue`
+
+This is the counter's value
+
+> [!NOTE]
+> This value is required
 
 ## Exposed events
 
@@ -53,12 +63,19 @@ These are the events you may subscribe to
 
 Here's the expanded previous snippet example showing how to subscribe to these events in your markup:
 ```xaml
-<vc:UpDownControl/>
+<vc:UpDownControl CurrentValue="5.1" CurrentValueChanged="WUDC_CurrentValueChanged"/>
 ```
 
 Here's the same one seen from your code-behind (still assuming you named the variable as "WUDC"):
 ```c#
+WUDC.CurrentValue=5.1m;
+
+WUDC.CurrentValueChanged+=WUDC_CurrentValueChanged;
 ```
+
+### `CurrentValueChanged`
+
+This event is triggered when the current value changes
 
 ## Documentation
 
@@ -72,6 +89,9 @@ The code documentation is written in XML (as it's the C# standard way)
 
 Tests are functional ones and performed manually. They include the following:
 
+- checking required properties are set and not null
+- checking you can subscribe to and unsubscribe from events
+
 ## Changelog
 
 See the [changelog](changelog.md)
@@ -83,3 +103,5 @@ This project is licensed under the Apache 2.0 license
 ## Credits
 
 I did a 1st try for the XAML markup, but didn't get the result I wanted. So I picked part of the markup from [Stopbyte/WPF-Numeric-Spinner-NumericUpDown project](https://github.com/Stopbyte/WPF-Numeric-Spinner-NumericUpDown/blob/master/NumericSpinner.xaml) instead
+
+As I found the events system quite uneasy to understand at first (it's the 1st time I'm diving into this), I asked ChatGPT to write the `CurrentValueChanged` event (including the dependency property). Then I copied/pasted/adapted in order to make the following ones

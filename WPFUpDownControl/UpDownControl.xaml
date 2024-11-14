@@ -16,7 +16,7 @@
 				<ColumnDefinition/>
 				<ColumnDefinition Width="22"/>
 			</Grid.ColumnDefinitions>
-			<TextBox x:Name="ValueField" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Grid.Column="0" Grid.RowSpan="2"/>
+			<TextBox x:Name="ValueField" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Grid.Column="0" Grid.RowSpan="2" Text="{Binding CurrentValue, RelativeSource={RelativeSource AncestorType=UserControl}}" IsReadOnly="True"/>
 			<Border BorderBrush="#FF808080" BorderThickness="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Padding="0" Margin="0"/>
 		</Grid>
 	</Border>
