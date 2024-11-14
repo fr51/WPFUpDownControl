@@ -9,3 +9,5 @@
 ### New features
 
 This is the initial version with:
+
+- value
