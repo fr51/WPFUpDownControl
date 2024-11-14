@@ -15,6 +15,7 @@ This component intends to only hold a numeric value, whereas the TextBox aims to
 7. [Tests](#tests)
 8. [Changelog](#changelog)
 9. [License](#license)
+10. [Credits](#credits)
 
 ## Installation
 
@@ -78,3 +79,7 @@ See the [changelog](changelog.md)
 ## License
 
 This project is licensed under the Apache 2.0 license
+
+## Credits
+
+I did a 1st try for the XAML markup, but didn't get the result I wanted. So I picked part of the markup from [Stopbyte/WPF-Numeric-Spinner-NumericUpDown project](https://github.com/Stopbyte/WPF-Numeric-Spinner-NumericUpDown/blob/master/NumericSpinner.xaml) instead
