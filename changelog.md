@@ -10,5 +10,5 @@
 
 This is the initial version with:
 
-- value, step
+- value, step, minimum value
 - buttons to change the value

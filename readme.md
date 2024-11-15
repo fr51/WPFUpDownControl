@@ -11,9 +11,11 @@ This component intends to only hold a numeric value, whereas the TextBox aims to
 3. [Exposed properties](#exposed-properties)
 	1. [Current value](#currentvalue)
 	2. [Step](#step)
+	3. [Minimum value](#minvalue)
 4. [Exposed events](#exposed-events)
 	1. [Current value changed](#currentvaluechanged)
 	2. [Step changed](#stepchanged)
+	3. [Minimum value changed](#minvaluechanged)
 5. [Documentation](#documentation)
 6. [Dependencies](#dependencies)
 7. [Tests](#tests)
@@ -46,13 +48,14 @@ These are the properties you'll use in your markup
 
 Here's a snippet example showing how to set these properties in your markup:
 ```xaml
-<vc:UpDownControl CurrentValue="5.1" Step="0.75"/>
+<vc:UpDownControl CurrentValue="5.1" Step="0.75" MinValue="1"/>
 ```
 
 Here's the same one seen from your code-behind (assuming you named the variable as "WUDC"):
 ```c#
 WUDC.CurrentValue=5.1m;
 WUDC.Step=0.75m;
+WUDC.MinValue=1m;
 ```
 
 ### `CurrentValue`
@@ -61,6 +64,16 @@ This is the counter's value
 
 > [!NOTE]
 > This value is required
+
+> [!WARNING]
+> Be careful when changing this one in your code-behind. If `MinValue` and/or `MaxValue` are defined, it always has to be between these two ones (i.e. `MinValue (if defined) <= CurrentValue <= MaxValue (if defined)`). Otherwise, an exception will pop up
+>
+> For example, let's say you have the following:
+> - `CurrentValue=1.5`
+> - `MaxValue=2`
+> - `MinValue=-3`.
+>
+> Setting `CurrentValue` to `3` will throw an exception. Whereas setting `MaxValue` to `3.1`, then `CurrentValue` to `3` won't
 
 ### `Step`
 
@@ -72,22 +85,34 @@ This is the value which is added/subtracted when you increase/decrease the curre
 > [!NOTE]
 > It must be defined and positive (i.e. `>= 0`)
 
+### `MinValue`
+
+This is the value the current one can't go under
+
+> [!NOTE]
+> This value is optional
+
+> [!NOTE]
+> It must be less than current value and (if defined) maximum one, i.e. `MinValue (if defined) <= CurrentValue` and `MinValue (if defined) <= MaxValue (if defined)`
+
 ## Exposed events
 
 These are the events you may subscribe to
 
 Here's the expanded previous snippet example showing how to subscribe to these events in your markup:
 ```xaml
-<vc:UpDownControl CurrentValue="5.1" Step="0.75" CurrentValueChanged="WUDC_CurrentValueChanged" StepChanged="WUDC_StepChanged"/>
+<vc:UpDownControl CurrentValue="5.1" Step="0.75" MinValue="1" CurrentValueChanged="WUDC_CurrentValueChanged" StepChanged="WUDC_StepChanged" MinValueChanged="WUDC_MinValueChanged"/>
 ```
 
 Here's the same one seen from your code-behind (still assuming you named the variable as "WUDC"):
 ```c#
 WUDC.CurrentValue=5.1m;
 WUDC.Step=0.75m;
+WUDC.MinValue=1m;
 
 WUDC.CurrentValueChanged+=WUDC_CurrentValueChanged;
 WUDC.StepChanged+=WUDC_StepChanged;
+WUDC.MinValueChanged+=WUDC_MinValueChanged;
 ```
 
 ### `CurrentValueChanged`
@@ -97,6 +122,10 @@ This event is triggered when the current value changes
 ### `StepChanged`
 
 This event is triggered when the step changes
+
+### `MinValueChanged`
+
+This event is triggered when the minimum value changes
 
 ## Documentation
 
@@ -113,6 +142,8 @@ Tests are functional ones and performed manually. They include the following:
 - checking required properties are set and not null
 - checking you can subscribe to and unsubscribe from events
 - checking buttons change the current value according to the step
+- checking current value remains within defined minimum and/or maximum value(s)
+- checking minimum value is always less than maximum and current ones
 
 ## Changelog
 
