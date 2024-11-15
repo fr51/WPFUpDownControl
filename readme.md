@@ -35,6 +35,8 @@ This component intends to only hold a numeric value, whereas the TextBox aims to
 > [!NOTE]
 > This section applies to the final user
 
+The only way to change the value is, for now, by clicking the buttons. Additional ways will be added in upcoming versions
+
 ## Exposed properties
 
 These are the properties you'll use in your markup
@@ -110,6 +112,7 @@ Tests are functional ones and performed manually. They include the following:
 
 - checking required properties are set and not null
 - checking you can subscribe to and unsubscribe from events
+- checking buttons change the current value according to the step
 
 ## Changelog
 

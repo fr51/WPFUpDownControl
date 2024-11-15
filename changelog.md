@@ -11,3 +11,4 @@
 This is the initial version with:
 
 - value, step
+- buttons to change the value
