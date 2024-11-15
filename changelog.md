@@ -10,4 +10,4 @@
 
 This is the initial version with:
 
-- value
+- value, step

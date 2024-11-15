@@ -10,8 +10,10 @@ This component intends to only hold a numeric value, whereas the TextBox aims to
 2. [How to use](#how-to-use)
 3. [Exposed properties](#exposed-properties)
 	1. [Current value](#currentvalue)
+	2. [Step](#step)
 4. [Exposed events](#exposed-events)
 	1. [Current value changed](#currentvaluechanged)
+	2. [Step changed](#stepchanged)
 5. [Documentation](#documentation)
 6. [Dependencies](#dependencies)
 7. [Tests](#tests)
@@ -42,12 +44,13 @@ These are the properties you'll use in your markup
 
 Here's a snippet example showing how to set these properties in your markup:
 ```xaml
-<vc:UpDownControl CurrentValue="5.1"/>
+<vc:UpDownControl CurrentValue="5.1" Step="0.75"/>
 ```
 
 Here's the same one seen from your code-behind (assuming you named the variable as "WUDC"):
 ```c#
 WUDC.CurrentValue=5.1m;
+WUDC.Step=0.75m;
 ```
 
 ### `CurrentValue`
@@ -57,25 +60,41 @@ This is the counter's value
 > [!NOTE]
 > This value is required
 
+### `Step`
+
+This is the value which is added/subtracted when you increase/decrease the current one
+
+> [!NOTE]
+> This value is required
+
+> [!NOTE]
+> It must be defined and positive (i.e. `>= 0`)
+
 ## Exposed events
 
 These are the events you may subscribe to
 
 Here's the expanded previous snippet example showing how to subscribe to these events in your markup:
 ```xaml
-<vc:UpDownControl CurrentValue="5.1" CurrentValueChanged="WUDC_CurrentValueChanged"/>
+<vc:UpDownControl CurrentValue="5.1" Step="0.75" CurrentValueChanged="WUDC_CurrentValueChanged" StepChanged="WUDC_StepChanged"/>
 ```
 
 Here's the same one seen from your code-behind (still assuming you named the variable as "WUDC"):
 ```c#
 WUDC.CurrentValue=5.1m;
+WUDC.Step=0.75m;
 
 WUDC.CurrentValueChanged+=WUDC_CurrentValueChanged;
+WUDC.StepChanged+=WUDC_StepChanged;
 ```
 
 ### `CurrentValueChanged`
 
 This event is triggered when the current value changes
+
+### `StepChanged`
+
+This event is triggered when the step changes
 
 ## Documentation
 
