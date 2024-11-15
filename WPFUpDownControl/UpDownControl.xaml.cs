@@ -207,5 +207,49 @@ namespace WPFUpDownControl
 
 			RaiseEvent (routedEventArgs);
 		}
+
+		/// <summary>
+		/// Handles the click on the <see cref="IncreaseButton"/> button
+		/// </summary>
+		/// <param name="sender">
+		/// the <see cref="IncreaseButton"/> button
+		/// </param>
+		/// <param name="routedEventArgs">
+		/// some event-related data
+		/// </param>
+		private void IncreaseButton_Click (object sender, RoutedEventArgs routedEventArgs)
+		{
+			this.IncreaseCurrentValue ();
+		}
+
+		/// <summary>
+		/// Handles the click on the <see cref="DecreaseButton"/> button
+		/// </summary>
+		/// <param name="sender">
+		/// the <see cref="DecreaseButton"/> button
+		/// </param>
+		/// <param name="routedEventArgs">
+		/// some event-related data
+		/// </param>
+		private void DecreaseButton_Click (object sender, RoutedEventArgs routedEventArgs)
+		{
+			this.DecreaseCurrentValue ();
+		}
+
+		/// <summary>
+		/// Adds <see cref="Step"/> to <see cref="CurrentValue"/>
+		/// </summary>
+		private void IncreaseCurrentValue ()
+		{
+			this.CurrentValue+=this.Step;
+		}
+
+		/// <summary>
+		/// Subtracts <see cref="Step"/> from <see cref="CurrentValue"/>
+		/// </summary>
+		private void DecreaseCurrentValue ()
+		{
+			this.CurrentValue-=this.Step;
+		}
 	}
 }
