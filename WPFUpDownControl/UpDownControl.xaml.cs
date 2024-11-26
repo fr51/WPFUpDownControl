@@ -22,6 +22,10 @@ namespace WPFUpDownControl
 		/// Exposes the <see cref="MinValue"/> property
 		/// </summary>
 		public static readonly DependencyProperty minValueProperty=DependencyProperty.Register ("MinValue", typeof (decimal?), typeof (UpDownControl), new PropertyMetadata (null, OnMinValuePropertyChanged));
+		/// <summary>
+		/// Exposes the <see cref="MaxValue"/> property
+		/// </summary>
+		public static readonly DependencyProperty maxValueProperty=DependencyProperty.Register ("MaxValue", typeof (decimal?), typeof (UpDownControl), new PropertyMetadata (null, OnMaxValuePropertyChanged));
 
 		/// <summary>
 		/// Exposes the <see cref="CurrentValueChanged"/> event
@@ -35,6 +39,10 @@ namespace WPFUpDownControl
 		/// Exposes the <see cref="MinValueChanged"/> event
 		/// </summary>
 		public static readonly RoutedEvent MinValueChangedEvent=EventManager.RegisterRoutedEvent ("MinValueChanged", RoutingStrategy.Bubble, typeof (RoutedEventHandler), typeof (UpDownControl));
+		/// <summary>
+		/// Exposes the <see cref="MaxValueChanged"/> event
+		/// </summary>
+		public static readonly RoutedEvent MaxValueChangedEvent=EventManager.RegisterRoutedEvent ("MaxValueChanged", RoutingStrategy.Bubble, typeof (RoutedEventHandler), typeof (UpDownControl));
 
 		/// <summary>
 		/// This event triggers when the <see cref="CurrentValue"/> changes
@@ -79,6 +87,21 @@ namespace WPFUpDownControl
 			remove
 			{
 				RemoveHandler (MinValueChangedEvent, value);
+			}
+		}
+		/// <summary>
+		/// This event triggers when the <see cref="MaxValue"/> changes
+		/// </summary>
+		[Description ("Occurs when the maximum value changes")]
+		public event RoutedEventHandler MaxValueChanged
+		{
+			add
+			{
+				AddHandler (MaxValueChangedEvent, value);
+			}
+			remove
+			{
+				RemoveHandler (MaxValueChangedEvent, value);
 			}
 		}
 
@@ -130,6 +153,22 @@ namespace WPFUpDownControl
 				SetValue (minValueProperty, value);
 			}
 		}
+		/// <summary>
+		/// This is the value the <see cref="CurrentValue"/> can't go above
+		/// </summary>
+		[Bindable (true)]
+		public decimal? MaxValue
+		{
+			get
+			{
+				return ((decimal?) GetValue (maxValueProperty));
+			}
+			set
+			{
+				this.CheckMaxValue (value);
+				SetValue (maxValueProperty, value);
+			}
+		}
 
 		/// <summary>
 		/// Constructor. It performs a few value checks before the user uses the control
@@ -155,6 +194,7 @@ namespace WPFUpDownControl
 			this.CheckCurrentValue (this.CurrentValue);
 			this.CheckStep (this.Step);
 			this.CheckMinValue (this.MinValue);
+			this.CheckMaxValue (this.MaxValue);
 		}
 
 		/// <summary>
@@ -176,6 +216,11 @@ namespace WPFUpDownControl
 			if (this.MinValue!=null && value<this.MinValue)
 			{
 				throw new Exception ("Current value can't be less than min one");
+			}
+
+			if (this.MaxValue!=null && value>this.MaxValue)
+			{
+				throw new Exception ("Current value can't be more than max one");
 			}
 		}
 
@@ -217,6 +262,36 @@ namespace WPFUpDownControl
 				if (value>this.CurrentValue)
 				{
 					throw new Exception ("Min value must be less than current one");
+				}
+
+				if (this.MaxValue!=null && value>this.MaxValue)
+				{
+					throw new Exception ("Min value must be less than max one");
+				}
+			}
+		}
+
+		/// <summary>
+		/// Checks <see cref="MaxValue"/> fulfills some constraints
+		/// </summary>
+		/// <param name="value">
+		/// the <see cref="MaxValue"/>
+		/// </param>
+		/// <exception cref="Exception">
+		/// thrown when one of the constraints isn't fulfilled
+		/// </exception>
+		private void CheckMaxValue (decimal? value)
+		{
+			if (value!=null)
+			{
+				if (value<this.CurrentValue)
+				{
+					throw new Exception ("Max value must be more than current one");
+				}
+
+				if (this.MinValue!=null && value<this.MinValue)
+				{
+					throw new Exception ("Max value must be more than min one");
 				}
 			}
 		}
@@ -300,6 +375,32 @@ namespace WPFUpDownControl
 		}
 
 		/// <summary>
+		/// callback triggered when the <see cref="maxValueProperty"/> changes
+		/// </summary>
+		/// <param name="dependencyObject">
+		/// the <see cref="DependencyObject"/> where the property changed
+		/// </param>
+		/// <param name="dependencyPropertyChangedEventArgs">
+		/// some change-related data
+		/// </param>
+		private static void OnMaxValuePropertyChanged (DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+		{
+			UpDownControl upDownControl=(UpDownControl) dependencyObject;
+
+			upDownControl.OnMaxValueChanged ();
+		}
+
+		/// <summary>
+		/// Raises the <see cref="MaxValueChangedEvent"/> event
+		/// </summary>
+		protected void OnMaxValueChanged ()
+		{
+			RoutedEventArgs routedEventArgs=new RoutedEventArgs (MaxValueChangedEvent);
+
+			RaiseEvent (routedEventArgs);
+		}
+
+		/// <summary>
 		/// Handles the click on the <see cref="IncreaseButton"/> button
 		/// </summary>
 		/// <param name="sender">
@@ -332,7 +433,17 @@ namespace WPFUpDownControl
 		/// </summary>
 		private void IncreaseCurrentValue ()
 		{
-			this.CurrentValue+=this.Step;
+			if (this.MaxValue!=null)
+			{
+				if (this.CurrentValue+this.Step<=this.MaxValue)
+				{
+					this.CurrentValue+=this.Step;
+				}
+			}
+			else
+			{
+				this.CurrentValue+=this.Step;
+			}
 		}
 
 		/// <summary>

@@ -12,10 +12,12 @@ This component intends to only hold a numeric value, whereas the TextBox aims to
 	1. [Current value](#currentvalue)
 	2. [Step](#step)
 	3. [Minimum value](#minvalue)
+	4. [Maximum value](#maxvalue)
 4. [Exposed events](#exposed-events)
 	1. [Current value changed](#currentvaluechanged)
 	2. [Step changed](#stepchanged)
 	3. [Minimum value changed](#minvaluechanged)
+	4. [Maximum value changed](#maxvaluechanged)
 5. [Documentation](#documentation)
 6. [Dependencies](#dependencies)
 7. [Tests](#tests)
@@ -48,7 +50,7 @@ These are the properties you'll use in your markup
 
 Here's a snippet example showing how to set these properties in your markup:
 ```xaml
-<vc:UpDownControl CurrentValue="5.1" Step="0.75" MinValue="1"/>
+<vc:UpDownControl CurrentValue="5.1" Step="0.75" MinValue="1" MaxValue="10.999"/>
 ```
 
 Here's the same one seen from your code-behind (assuming you named the variable as "WUDC"):
@@ -56,6 +58,7 @@ Here's the same one seen from your code-behind (assuming you named the variable 
 WUDC.CurrentValue=5.1m;
 WUDC.Step=0.75m;
 WUDC.MinValue=1m;
+WUDC.MaxValue=10.999m;
 ```
 
 ### `CurrentValue`
@@ -95,13 +98,23 @@ This is the value the current one can't go under
 > [!NOTE]
 > It must be less than current value and (if defined) maximum one, i.e. `MinValue (if defined) <= CurrentValue` and `MinValue (if defined) <= MaxValue (if defined)`
 
+### `MaxValue`
+
+This is the value the current one can't go above
+
+> [!NOTE]
+> This value is optional
+
+> [!NOTE]
+> It must be more than current value and (if defined) minimum one, i.e. `MaxValue (if defined) >= CurrentValue` and `MaxValue (if defined) >= MinValue (if defined)`
+
 ## Exposed events
 
 These are the events you may subscribe to
 
 Here's the expanded previous snippet example showing how to subscribe to these events in your markup:
 ```xaml
-<vc:UpDownControl CurrentValue="5.1" Step="0.75" MinValue="1" CurrentValueChanged="WUDC_CurrentValueChanged" StepChanged="WUDC_StepChanged" MinValueChanged="WUDC_MinValueChanged"/>
+<vc:UpDownControl CurrentValue="5.1" Step="0.75" MinValue="1" MaxValue="10.999" CurrentValueChanged="WUDC_CurrentValueChanged" StepChanged="WUDC_StepChanged" MinValueChanged="WUDC_MinValueChanged" MaxValueChanged="WUDC_MaxValueChanged"/>
 ```
 
 Here's the same one seen from your code-behind (still assuming you named the variable as "WUDC"):
@@ -109,10 +122,12 @@ Here's the same one seen from your code-behind (still assuming you named the var
 WUDC.CurrentValue=5.1m;
 WUDC.Step=0.75m;
 WUDC.MinValue=1m;
+WUDC.MaxValue=10.999m;
 
 WUDC.CurrentValueChanged+=WUDC_CurrentValueChanged;
 WUDC.StepChanged+=WUDC_StepChanged;
 WUDC.MinValueChanged+=WUDC_MinValueChanged;
+WUDC.MaxValueChanged+=WUDC_MaxValueChanged;
 ```
 
 ### `CurrentValueChanged`
@@ -126,6 +141,10 @@ This event is triggered when the step changes
 ### `MinValueChanged`
 
 This event is triggered when the minimum value changes
+
+### `MaxValueChanged`
+
+This event is triggered when the maximum value changes
 
 ## Documentation
 
@@ -144,6 +163,7 @@ Tests are functional ones and performed manually. They include the following:
 - checking buttons change the current value according to the step
 - checking current value remains within defined minimum and/or maximum value(s)
 - checking minimum value is always less than maximum and current ones
+- checking maximum value is always more than minimum and current ones
 
 ## Changelog
 
