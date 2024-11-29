@@ -9,3 +9,6 @@
 ### New features
 
 This is the initial version with:
+
+- value, step, minimum value, maximum value
+- buttons to change the value
