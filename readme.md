@@ -164,6 +164,7 @@ Tests are functional ones and performed manually. They include the following:
 - checking current value remains within defined minimum and/or maximum value(s)
 - checking minimum value is always less than maximum and current ones
 - checking maximum value is always more than minimum and current ones
+- checking current value changes when you roll the mousewheel
 
 ## Changelog
 

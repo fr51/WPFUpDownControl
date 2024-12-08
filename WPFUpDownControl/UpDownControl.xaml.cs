@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace WPFUpDownControl
 {
@@ -461,6 +462,30 @@ namespace WPFUpDownControl
 			else
 			{
 				this.CurrentValue-=this.Step;
+			}
+		}
+
+		/// <summary>
+		/// Handles the mousewheel movement
+		/// </summary>
+		/// <param name="sender">
+		/// the <see cref="ValueField"/> textbox
+		/// </param>
+		/// <param name="mouseWheelEventArgs">
+		/// some event-related data
+		/// </param>
+		private void ValueField_MouseWheel (object sender, MouseWheelEventArgs mouseWheelEventArgs)
+		{
+			if (mouseWheelEventArgs.Delta>0) //wheel up
+			{
+				this.IncreaseCurrentValue ();
+
+				return;
+			}
+
+			if (mouseWheelEventArgs.Delta<0) //wheel down
+			{
+				this.DecreaseCurrentValue ();
 			}
 		}
 	}
