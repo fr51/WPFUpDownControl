@@ -2,7 +2,16 @@
 
 ## Table of contents
 
-1. [v1](#v1)
+1. [v1.1](#v1-1)
+2. [v1](#v1)
+
+## v1.1
+
+### New features
+
+Added some alternate ways to change the value:
+
+- by using the mouse wheel
 
 ## v1
 
