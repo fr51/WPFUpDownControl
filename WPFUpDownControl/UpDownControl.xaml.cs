@@ -185,7 +185,7 @@ namespace WPFUpDownControl
 		/// Performs some checks and adjustments when the control is ready to use
 		/// </summary>
 		/// <param name="sender">
-		/// the <see cref="SpinnerItself"/> control
+		/// the <see cref="UpDownControl"/> control
 		/// </param>
 		/// <param name="routedEventArgs">
 		/// some event-related data
@@ -196,6 +196,8 @@ namespace WPFUpDownControl
 			this.CheckStep (this.Step);
 			this.CheckMinValue (this.MinValue);
 			this.CheckMaxValue (this.MaxValue);
+
+			this.ValueField.AddHandler (TextBox.KeyDownEvent, new KeyEventHandler (this.ValueField_KeyDown), true); //allowing to change current value with arrow keys; the important part here is the 3rd argument
 		}
 
 		/// <summary>
@@ -486,6 +488,32 @@ namespace WPFUpDownControl
 			if (mouseWheelEventArgs.Delta<0) //wheel down
 			{
 				this.DecreaseCurrentValue ();
+			}
+		}
+
+		/// <summary>
+		/// Handles the <see cref="ValueField"/>'s KeyDown event
+		/// </summary>
+		/// <param name="sender">
+		/// the <see cref="ValueField"/> textbox
+		/// </param>
+		/// <param name="keyEventArgs">
+		/// some event-related data
+		/// </param>
+		private void ValueField_KeyDown (object sender, KeyEventArgs keyEventArgs)
+		{
+			switch (keyEventArgs.Key)
+			{
+				case Key.Up:
+					this.IncreaseCurrentValue ();
+
+					break;
+				case Key.Down:
+					this.DecreaseCurrentValue ();
+
+					break;
+				default:
+					return;
 			}
 		}
 	}
