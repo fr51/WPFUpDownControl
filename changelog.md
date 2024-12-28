@@ -2,7 +2,20 @@
 
 ## Table of contents
 
-1. [v1](#v1)
+1. [v1.1](#v1-1)
+2. [v1](#v1)
+
+## v1.1
+
+### New features
+
+Added some alternate ways to change the value:
+
+- by using the mouse wheel
+- by using the `Up` & `Down` arrow keys
+- by typing a value
+
+This provides more flexibility and ease of use, especially in scenarios where the user prefers not to click the buttons
 
 ## v1
 

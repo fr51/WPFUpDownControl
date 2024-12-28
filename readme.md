@@ -39,7 +39,12 @@ This component intends to only hold a numeric value, whereas the TextBox aims to
 > [!NOTE]
 > This section applies to the final user
 
-The only way to change the value is, for now, by clicking the buttons. Additional ways will be added in upcoming versions
+This section briefly summarizes the four ways to change the value. These ways are:
+
+- by clicking the buttons
+- by rolling the mousewheel
+- by using the `Up` and `Down` arrow keys
+- by typing a value
 
 ## Exposed properties
 
@@ -65,10 +70,12 @@ WUDC.MaxValue=10.999m;
 
 This is the counter's value
 
+If you type an invalid value, it will be refused, and the last valid one will be used instead
+
 > [!NOTE]
 > This value is required
 
-> [!WARNING]
+> [!IMPORTANT]
 > Be careful when changing this one in your code-behind. If `MinValue` and/or `MaxValue` are defined, it always has to be between these two ones (i.e. `MinValue (if defined) <= CurrentValue <= MaxValue (if defined)`). Otherwise, an exception will pop up
 >
 > For example, let's say you have the following:
@@ -77,6 +84,14 @@ This is the counter's value
 > - `MinValue=-3`.
 >
 > Setting `CurrentValue` to `3` will throw an exception. Whereas setting `MaxValue` to `3.1`, then `CurrentValue` to `3` won't
+
+#### Information regarding value typing
+
+> [!IMPORTANT]
+> The value you typed is processed when the textbox looses focus
+
+> [!TIP]
+> The decimal separator has to be `.`. However, in an ease of use purpose, you may use your culture's one
 
 ### `Step`
 
@@ -164,6 +179,10 @@ Tests are functional ones and performed manually. They include the following:
 - checking current value remains within defined minimum and/or maximum value(s)
 - checking minimum value is always less than maximum and current ones
 - checking maximum value is always more than minimum and current ones
+- checking current value changes when you roll the mousewheel
+- checking current value changes when you use the `Up` and `Down` arrow keys
+- checking current value changes when you type a value
+- checking the only allowed decimal separators are `.` and culture-defined one
 
 ## Changelog
 
@@ -178,3 +197,5 @@ This project is licensed under the Apache 2.0 license
 I did a 1st try for the XAML markup, but didn't get the result I wanted. So I picked part of the markup from [Stopbyte/WPF-Numeric-Spinner-NumericUpDown project](https://github.com/Stopbyte/WPF-Numeric-Spinner-NumericUpDown/blob/master/NumericSpinner.xaml) instead
 
 As I found the events system quite uneasy to understand at first (it's the 1st time I'm diving into this), I asked ChatGPT to write the `CurrentValueChanged` event (including the dependency property). Then I copied/pasted/adapted in order to make the following ones
+
+I used the regular expression from [Regular-Expressions.info](https://www.regular-expressions.info/floatingpoint.html) for validating the values typed. I replaced some tokens with their equivalent explicit quantifiers and fixed a mistake I noticed

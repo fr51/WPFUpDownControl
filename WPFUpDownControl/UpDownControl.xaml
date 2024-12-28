@@ -16,7 +16,7 @@
 				<ColumnDefinition/>
 				<ColumnDefinition Width="22"/>
 			</Grid.ColumnDefinitions>
-			<TextBox x:Name="ValueField" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Grid.Column="0" Grid.RowSpan="2" Text="{Binding CurrentValue, RelativeSource={RelativeSource AncestorType=UserControl}}" IsReadOnly="True"/>
+			<TextBox x:Name="ValueField" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Grid.Column="0" Grid.RowSpan="2" Text="{Binding CurrentValue, RelativeSource={RelativeSource AncestorType=UserControl}}" MouseWheel="ValueField_MouseWheel" KeyDown="ValueField_KeyDown" LostFocus="ValueField_LostFocus"/>
 			<Button x:Name="IncreaseButton" Grid.Column="1" Grid.Row="0" Width="auto" Height="auto" Click="IncreaseButton_Click" Content="+"/>
 			<Button x:Name="DecreaseButton" Grid.Column="1" Grid.Row="1" Width="auto" Height="auto" Click="DecreaseButton_Click" Content="-"/>
 			<Border BorderBrush="#FF808080" BorderThickness="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Padding="0" Margin="0"/>
