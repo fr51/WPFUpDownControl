@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace WPFUpDownControl
 {
@@ -514,6 +516,44 @@ namespace WPFUpDownControl
 					break;
 				default:
 					return;
+			}
+		}
+
+		/// <summary>
+		/// Handles the <see cref="ValueField"/> textbox focus loss
+		/// </summary>
+		/// <param name="sender">
+		/// the <see cref="ValueField"/> textbox
+		/// </param>
+		/// <param name="routedEventArgs">
+		/// some event-related data
+		/// </param>
+		private void ValueField_LostFocus (object sender, RoutedEventArgs routedEventArgs)
+		{
+			if (Regex.IsMatch (this.ValueField.Text, "^-{0,1}([0-9]{1,}\\.[0-9]{1,}|[0-9]{1,})$", RegexOptions.CultureInvariant)==true) //validating format
+			{
+				if (decimal.TryParse (this.ValueField.Text, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out decimal newValue)==true)
+				{
+					try
+					{
+						this.CheckCurrentValue (newValue);
+
+						this.CurrentValue=newValue; //this will trigger the OnCurrentValuePropertyChanged callback
+						this.ValueField.Text=this.CurrentValue.ToString ().Replace (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, "."); //reverting to last valid value if parsing fails
+					}
+					catch (Exception)
+					{
+						this.ValueField.Text=this.CurrentValue.ToString ().Replace (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, ".");
+					}
+				}
+				else
+				{
+					this.ValueField.Text=this.CurrentValue.ToString ().Replace (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, ".");
+				}
+			}
+			else
+			{
+				this.ValueField.Text=this.CurrentValue.ToString ().Replace (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, ".");
 			}
 		}
 	}

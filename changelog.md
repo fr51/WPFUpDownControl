@@ -13,6 +13,7 @@ Added some alternate ways to change the value:
 
 - by using the mouse wheel
 - by using the `Up` & `Down` arrow keys
+- by typing a value
 
 ## v1
 
