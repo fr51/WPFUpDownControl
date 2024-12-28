@@ -39,7 +39,12 @@ This component intends to only hold a numeric value, whereas the TextBox aims to
 > [!NOTE]
 > This section applies to the final user
 
-The only way to change the value is, for now, by clicking the buttons. Additional ways will be added in upcoming versions
+This section briefly summarizes the four ways to change the value. These ways are:
+
+- by clicking the buttons
+- by rolling the mousewheel
+- by using the `Up` and `Down` arrow keys
+- by typing a value
 
 ## Exposed properties
 
@@ -70,7 +75,7 @@ If you type an invalid value, it will be refused, and the last valid one will be
 > [!NOTE]
 > This value is required
 
-> [!WARNING]
+> [!IMPORTANT]
 > Be careful when changing this one in your code-behind. If `MinValue` and/or `MaxValue` are defined, it always has to be between these two ones (i.e. `MinValue (if defined) <= CurrentValue <= MaxValue (if defined)`). Otherwise, an exception will pop up
 >
 > For example, let's say you have the following:

@@ -15,6 +15,8 @@ Added some alternate ways to change the value:
 - by using the `Up` & `Down` arrow keys
 - by typing a value
 
+This provides more flexibility and ease of use, especially in scenarios where the user prefers not to click the buttons
+
 ## v1
 
 ### New features
