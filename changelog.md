@@ -2,8 +2,15 @@
 
 ## Table of contents
 
-1. [v1.1](#v1-1)
-2. [v1](#v1)
+1. [v1.2](#v1-2)
+2. [v1.1](#v1-1)
+3. [v1](#v1)
+
+## v1.2
+
+### New features
+
+Added a feature allowing to prevent the user from typing a value
 
 ## v1.1
 
