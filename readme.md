@@ -13,11 +13,13 @@ This component intends to only hold a numeric value, whereas the TextBox aims to
 	2. [Step](#step)
 	3. [Minimum value](#minvalue)
 	4. [Maximum value](#maxvalue)
+	5. [Buttons only](#buttonsonly)
 4. [Exposed events](#exposed-events)
 	1. [Current value changed](#currentvaluechanged)
 	2. [Step changed](#stepchanged)
 	3. [Minimum value changed](#minvaluechanged)
 	4. [Maximum value changed](#maxvaluechanged)
+	5. [Buttons only changed](#buttonsonlychanged)
 5. [Documentation](#documentation)
 6. [Dependencies](#dependencies)
 7. [Tests](#tests)
@@ -51,7 +53,7 @@ This section briefly summarizes the four ways to change the value. These ways ar
 These are the properties you'll use in your markup
 
 > [!NOTE]
-> These properties are of `decimal` type. It's up to you to cast to other types if needed
+> `CurrentValue`, `StepValue`, `MinimumValue` and `MaximumValue` properties are of `decimal` type. It's up to you to cast to other types if needed
 
 Here's a snippet example showing how to set these properties in your markup:
 ```xaml
@@ -123,6 +125,13 @@ This is the value the current one can't go above
 > [!NOTE]
 > It must be more than current value and (if defined) minimum one, i.e. `MaxValue (if defined) >= CurrentValue` and `MaxValue (if defined) >= MinValue (if defined)`
 
+### `ButtonsOnly`
+
+This property controls whether the user can manually type a value. If set to `false`, the control is only usable through buttons
+
+> [!NOTE]
+> This boolean value is optional. Default is `false`
+
 ## Exposed events
 
 These are the events you may subscribe to
@@ -160,6 +169,10 @@ This event is triggered when the minimum value changes
 ### `MaxValueChanged`
 
 This event is triggered when the maximum value changes
+
+### `ButtonsOnlyChanged`
+
+This event is triggered when the user is (dis)allowed to type a value
 
 ## Documentation
 
