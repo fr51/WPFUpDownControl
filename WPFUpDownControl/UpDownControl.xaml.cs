@@ -29,6 +29,10 @@ namespace WPFUpDownControl
 		/// Exposes the <see cref="MaxValue"/> property
 		/// </summary>
 		public static readonly DependencyProperty maxValueProperty=DependencyProperty.Register ("MaxValue", typeof (decimal?), typeof (UpDownControl), new PropertyMetadata (null, OnMaxValuePropertyChanged));
+		/// <summary>
+		/// Exposes the <see cref="ButtonsOnly"/> property
+		/// </summary>
+		public static readonly DependencyProperty buttonsOnlyProperty=DependencyProperty.Register ("ButtonsOnly", typeof (bool), typeof (UpDownControl), new PropertyMetadata (false, OnButtonsOnlyPropertyChanged));
 
 		/// <summary>
 		/// Exposes the <see cref="CurrentValueChanged"/> event
@@ -46,6 +50,10 @@ namespace WPFUpDownControl
 		/// Exposes the <see cref="MaxValueChanged"/> event
 		/// </summary>
 		public static readonly RoutedEvent MaxValueChangedEvent=EventManager.RegisterRoutedEvent ("MaxValueChanged", RoutingStrategy.Bubble, typeof (RoutedEventHandler), typeof (UpDownControl));
+		/// <summary>
+		/// Exposes the <see cref="ButtonsOnlyChanged"/> event
+		/// </summary>
+		public static readonly RoutedEvent ButtonsOnlyChangedEvent=EventManager.RegisterRoutedEvent ("ButtonsOnlyChanged", RoutingStrategy.Bubble, typeof (RoutedEventHandler), typeof (UpDownControl));
 
 		/// <summary>
 		/// This event triggers when the <see cref="CurrentValue"/> changes
@@ -105,6 +113,21 @@ namespace WPFUpDownControl
 			remove
 			{
 				RemoveHandler (MaxValueChangedEvent, value);
+			}
+		}
+		/// <summary>
+		/// This event triggers when typing is enabled/disabled
+		/// </summary>
+		[Description ("Occurs when typing is enabled/disabled")]
+		public event RoutedEventHandler ButtonsOnlyChanged
+		{
+			add
+			{
+				AddHandler (ButtonsOnlyChangedEvent, value);
+			}
+			remove
+			{
+				RemoveHandler (ButtonsOnlyChangedEvent, value);
 			}
 		}
 
@@ -172,6 +195,21 @@ namespace WPFUpDownControl
 				SetValue (maxValueProperty, value);
 			}
 		}
+		/// <summary>
+		/// This (dis)allows the user to type a value
+		/// </summary>
+		[Bindable (true)]
+		public bool ButtonsOnly
+		{
+			get
+			{
+				return ((bool) GetValue (buttonsOnlyProperty));
+			}
+			set
+			{
+				SetValue (buttonsOnlyProperty, value);
+			}
+		}
 
 		/// <summary>
 		/// Constructor. It performs a few value checks before the user uses the control
@@ -198,6 +236,8 @@ namespace WPFUpDownControl
 			this.CheckStep (this.Step);
 			this.CheckMinValue (this.MinValue);
 			this.CheckMaxValue (this.MaxValue);
+
+			this.AdjustButtonsOnlyValues ();
 
 			this.ValueField.AddHandler (TextBox.KeyDownEvent, new KeyEventHandler (this.ValueField_KeyDown), true); //allowing to change current value with arrow keys; the important part here is the 3rd argument
 		}
@@ -406,6 +446,34 @@ namespace WPFUpDownControl
 		}
 
 		/// <summary>
+		/// callback triggered when the <see cref="canTypeValueProperty"/> changes
+		/// </summary>
+		/// <param name="dependencyObject">
+		/// the <see cref="DependencyObject"/> where the property changed
+		/// </param>
+		/// <param name="dependencyPropertyChangedEventArgs">
+		/// some change-related data
+		/// </param>
+		private static void OnButtonsOnlyPropertyChanged (DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+		{
+			UpDownControl upDownControl=(UpDownControl) dependencyObject;
+
+			upDownControl.OnButtonsOnlyChanged ();
+		}
+
+		/// <summary>
+		/// Raises the <see cref="CanTypeValueChangedEvent"/> event
+		/// </summary>
+		protected void OnButtonsOnlyChanged ()
+		{
+			this.AdjustButtonsOnlyValues ();
+
+			RoutedEventArgs routedEventArgs=new RoutedEventArgs (ButtonsOnlyChangedEvent);
+
+			RaiseEvent (routedEventArgs);
+		}
+
+		/// <summary>
 		/// Handles the click on the <see cref="IncreaseButton"/> button
 		/// </summary>
 		/// <param name="sender">
@@ -530,18 +598,25 @@ namespace WPFUpDownControl
 		/// </param>
 		private void ValueField_LostFocus (object sender, RoutedEventArgs routedEventArgs)
 		{
-			if (Regex.IsMatch (this.ValueField.Text, "^-{0,1}([0-9]{1,}\\.[0-9]{1,}|[0-9]{1,})$", RegexOptions.CultureInvariant)==true) //validating format
+			if (this.ButtonsOnly==true)
 			{
-				if (decimal.TryParse (this.ValueField.Text, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out decimal newValue)==true)
+				if (Regex.IsMatch (this.ValueField.Text, "^-{0,1}([0-9]{1,}\\.[0-9]{1,}|[0-9]{1,})$", RegexOptions.CultureInvariant)==true) //validating format
 				{
-					try
+					if (decimal.TryParse (this.ValueField.Text, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out decimal newValue)==true)
 					{
-						this.CheckCurrentValue (newValue);
+						try
+						{
+							this.CheckCurrentValue (newValue);
 
-						this.CurrentValue=newValue; //this will trigger the OnCurrentValuePropertyChanged callback
-						this.ValueField.Text=this.CurrentValue.ToString ().Replace (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, "."); //reverting to last valid value if parsing fails
+							this.CurrentValue=newValue; //this will trigger the OnCurrentValuePropertyChanged callback
+							this.ValueField.Text=this.CurrentValue.ToString ().Replace (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, "."); //reverting to last valid value if parsing fails
+						}
+						catch (Exception)
+						{
+							this.ValueField.Text=this.CurrentValue.ToString ().Replace (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, ".");
+						}
 					}
-					catch (Exception)
+					else
 					{
 						this.ValueField.Text=this.CurrentValue.ToString ().Replace (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, ".");
 					}
@@ -551,10 +626,15 @@ namespace WPFUpDownControl
 					this.ValueField.Text=this.CurrentValue.ToString ().Replace (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, ".");
 				}
 			}
-			else
-			{
-				this.ValueField.Text=this.CurrentValue.ToString ().Replace (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, ".");
-			}
+		}
+
+		/// <summary>
+		/// Changes some <see cref="ValueField"/>'s properties according to <see cref="ButtonsOnly"/>'s value
+		/// </summary>
+		private void AdjustButtonsOnlyValues ()
+		{
+			this.ValueField.IsReadOnly=this.ButtonsOnly;
+			this.ValueField.IsUndoEnabled=!this.ButtonsOnly;
 		}
 	}
 }
